@@ -53,7 +53,7 @@ type Post struct {
 }
 
 func (p Post) FriendlyText() string {
-	return "[ID:" + p.ThreadID + "] [nickname: " + p.NickName + "] [" + p.CateName + "] [title: " + p.Title + "] " + p.Content +
+	return "[ThreadID:" + p.ThreadID + "] [nickname: " + p.NickName + "] [" + p.CateName + "] [title: " + p.Title + "] " + p.Content +
 		" (浏览" + fmt.Sprintf("%s", p.ViewCount.String()) + ", 评论" + fmt.Sprintf("%s", p.CommentCount.String()) +
 		", 点赞" + fmt.Sprintf("%s", p.LikeCount.String()) + ", " + p.PostTime + "[timestamp: " + p.PTime + "])"
 }
