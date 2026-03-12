@@ -159,7 +159,7 @@ func postData[T any](c *ZanaoClient, url string, data any) (*T, error) {
 // threadID: 帖子ID
 func (c *ZanaoClient) LikePost(threadID string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/thread/like?id=%s&comment_id=0&action=1", threadID)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -169,7 +169,7 @@ func (c *ZanaoClient) LikePost(threadID string) (bool, error) {
 // threadID: 帖子ID
 func (c *ZanaoClient) UnLikePost(threadID string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/thread/like?id=%s&comment_id=0&action=0", threadID)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -180,7 +180,7 @@ func (c *ZanaoClient) UnLikePost(threadID string) (bool, error) {
 // commentID: 评论ID
 func (c *ZanaoClient) LikeComment(threadID string, commentID string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/comment/like?id=%s&comment_id=%s&action=1", threadID, commentID)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -191,7 +191,7 @@ func (c *ZanaoClient) LikeComment(threadID string, commentID string) (bool, erro
 // commentID: 评论ID
 func (c *ZanaoClient) UnLikeComment(threadID string, commentID string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/comment/like?id=%s&comment_id=%s&action=0", threadID, commentID)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -211,7 +211,7 @@ func (c *ZanaoClient) PostComment(threadID string, content string, replyCommentI
 		rootCommentID = "0"
 	}
 	url := fmt.Sprintf("https://api.x.zanao.com/comment/post?id=%s&content=%s&reply_comment_id=%s&root_comment_id=%s&use_anon=%d&from=detail", threadID, url.QueryEscape(content), replyCommentID, rootCommentID, useAnon)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -222,7 +222,7 @@ func (c *ZanaoClient) PostComment(threadID string, content string, replyCommentI
 // commentID: 评论ID
 func (c *ZanaoClient) DeleteComment(threadID string, commentID string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/comment/delete?comment_id=%s&id=%s", commentID, threadID)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -250,7 +250,7 @@ func (c *ZanaoClient) CreatePost(title string, content string, cateID string, im
 		cateID,
 		isCommentClose,
 	)
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
@@ -261,7 +261,7 @@ func (c *ZanaoClient) CreatePost(title string, content string, cateID string, im
 // action: 操作类型 finish(结束帖子需求并隐藏发帖人信息)
 func (c *ZanaoClient) ChangePostStatus(threadID string, action string) (bool, error) {
 	url := fmt.Sprintf("https://api.x.zanao.com/thread/change?id=%s&act=%s", threadID, url.QueryEscape(action))
-	if _, err := postData[struct{}](c, url, nil); err != nil {
+	if _, err := postData[any](c, url, nil); err != nil {
 		return false, err
 	}
 	return true, nil
