@@ -63,6 +63,10 @@ go build -o zanao-mcp
 }
 ```
 
+![hot](./docs/hot.png)
+
+![comment](./docs/comment.png)
+
 ## 可用工具
 
 ### 帖子相关
