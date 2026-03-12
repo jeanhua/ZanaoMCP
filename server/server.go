@@ -9,7 +9,11 @@ import (
 )
 
 func StartServer() {
-	s := mcp.NewServer(&mcp.Implementation{Name: "zanao", Version: "v1.0.0"}, nil)
+	s := mcp.NewServer(&mcp.Implementation{
+		Name:    "zanao_campus_market",
+		Title:   "赞哦校园集市 MCP Server",
+		Version: "v1.0.0"},
+		nil)
 
 	// 注册帖子相关工具
 	tools.ListPostsTool(s)

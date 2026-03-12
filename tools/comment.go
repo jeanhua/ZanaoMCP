@@ -12,7 +12,7 @@ import (
 // GetCommentsTool 获取帖子评论工具
 func GetCommentsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "get_comments",
+		Name:        "campus_market_get_comments",
 		Description: "获取指定帖子的评论列表",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -59,7 +59,7 @@ func GetCommentsTool(s *mcp.Server) {
 // PostCommentTool 发表评论工具
 func PostCommentTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "post_comment",
+		Name:        "campus_market_post_comment",
 		Description: "在指定帖子下发表评论",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -140,7 +140,7 @@ func PostCommentTool(s *mcp.Server) {
 // DeleteCommentTool 删除评论工具
 func DeleteCommentTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "delete_comment",
+		Name:        "campus_market_delete_comment",
 		Description: "删除指定的评论",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -195,7 +195,7 @@ func DeleteCommentTool(s *mcp.Server) {
 // LikeCommentTool 点赞评论工具
 func LikeCommentTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "like_comment",
+		Name:        "campus_market_like_comment",
 		Description: "点赞指定的评论",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -250,7 +250,7 @@ func LikeCommentTool(s *mcp.Server) {
 // UnlikeCommentTool 取消点赞评论工具
 func UnlikeCommentTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "unlike_comment",
+		Name:        "campus_market_unlike_comment",
 		Description: "取消点赞指定的评论",
 		InputSchema: map[string]interface{}{
 			"type": "object",

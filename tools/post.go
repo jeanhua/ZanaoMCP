@@ -12,7 +12,7 @@ import (
 // ListPostsTool 获取帖子列表工具
 func ListPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "list_posts",
+		Name:        "campus_market_list_posts",
 		Description: "获取集市帖子列表，支持分页",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -23,6 +23,7 @@ func ListPostsTool(s *mcp.Server) {
 					"default":     "0",
 				},
 			},
+			"required": []string{""},
 		},
 	}, func(ctx context.Context, req *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		var args struct {
@@ -60,11 +61,12 @@ func ListPostsTool(s *mcp.Server) {
 // HotPostsTool 获取热门帖子工具
 func HotPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "hot_posts",
+		Name:        "campus_market_hot_posts",
 		Description: "获取集市热门帖子列表",
 		InputSchema: map[string]interface{}{
 			"type":       "object",
 			"properties": map[string]interface{}{},
+			"required":   []string{""},
 		},
 	}, func(ctx context.Context, req *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		client := getClient()
@@ -90,8 +92,8 @@ func HotPostsTool(s *mcp.Server) {
 // SearchPostsTool 搜索帖子工具
 func SearchPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "search_posts",
-		Description: "在集市中搜索帖子（当前分类）",
+		Name:        "campus_market_search_posts",
+		Description: "在集市中搜索实时帖子(最近的发布的帖子)",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -147,7 +149,7 @@ func SearchPostsTool(s *mcp.Server) {
 // SearchHistoryPostsTool 搜索历史帖子工具
 func SearchHistoryPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "search_history_posts",
+		Name:        "campus_market_search_history_posts",
 		Description: "在集市中搜索历史帖子，支持时间范围筛选",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -214,7 +216,7 @@ func SearchHistoryPostsTool(s *mcp.Server) {
 // LikePostTool 点赞帖子工具
 func LikePostTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "like_post",
+		Name:        "campus_market_like_post",
 		Description: "点赞指定的帖子",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -260,7 +262,7 @@ func LikePostTool(s *mcp.Server) {
 // UnlikePostTool 取消点赞帖子工具
 func UnlikePostTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "unlike_post",
+		Name:        "campus_market_unlike_post",
 		Description: "取消点赞指定的帖子",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -306,7 +308,7 @@ func UnlikePostTool(s *mcp.Server) {
 // CreatePostTool 创建帖子工具
 func CreatePostTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "create_post",
+		Name:        "campus_market_create_post",
 		Description: "在集市中创建新帖子",
 		InputSchema: map[string]interface{}{
 			"type": "object",
@@ -406,8 +408,8 @@ func CreatePostTool(s *mcp.Server) {
 // ChangePostStatusTool 修改帖子状态工具
 func ChangePostStatusTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
-		Name:        "change_post_status",
-		Description: "修改帖子状态，如结束帖子需求并隐藏发帖人信息",
+		Name:        "campus_market_change_post_status",
+		Description: "修改帖子状态，目前支持结束帖子需求并隐藏发帖人信息",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -417,7 +419,7 @@ func ChangePostStatusTool(s *mcp.Server) {
 				},
 				"action": map[string]interface{}{
 					"type":        "string",
-					"description": "操作类型，如 finish(结束帖子需求并隐藏发帖人信息)",
+					"description": "操作类型，填finish(结束帖子需求并隐藏发帖人信息)",
 					"default":     "finish",
 				},
 			},
