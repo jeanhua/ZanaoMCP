@@ -10,7 +10,7 @@ import (
 
 func StartServer() {
 	s := mcp.NewServer(&mcp.Implementation{
-		Name:    "zanao_campus_market",
+		Name:    "zanao campus market",
 		Title:   "赞哦校园集市 MCP Server",
 		Version: "v1.0.0"},
 		nil)

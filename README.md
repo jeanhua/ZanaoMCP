@@ -52,7 +52,7 @@ go build -o zanao-mcp
 ```json
 {
   "mcpServers": {
-    "zanao_campus_market": {
+    "zanao campus market": {
       "command": "/path/to/zanao-mcp",
       "env": {
         "ZANAO_TOKEN": "your_token",
