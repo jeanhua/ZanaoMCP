@@ -111,7 +111,7 @@ ZanaoMCP/
 │   ├── post.go       # 帖子相关工具
 │   ├── comment.go    # 评论相关工具
 │   ├── user.go       # 用户相关工具
-│   └── market.go     # 客户端初始化
+│   └── client.go     # 客户端初始化
 └── zanao/            # 赞哦 API 客户端
     ├── zanao.go      # 客户端实现
     ├── model.go      # 数据模型
