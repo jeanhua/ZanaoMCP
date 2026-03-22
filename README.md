@@ -12,11 +12,15 @@
 
 ## 安装
 
-### 前提条件
+### 方法一、下载二进制
+
+从 [Releases](https://github.com/jeanhua/ZanaoMCP/releases) 页面下载最新版本的二进制文件。
+
+### 方法二、从源码构建
+
+#### 前提条件
 
 - Go 1.25.0 或更高版本
-
-### 从源码构建
 
 ```bash
 git clone https://github.com/jeanhua/ZanaoMCP.git
@@ -35,7 +39,7 @@ go build -o zanao-mcp
 
 ### 获取 Token
 
-1. 登录赞哦微信小程序平台
+1. 登录**赞哦电脑端微信小程序**
 2. 在抓包工具中(推荐Fiddler Classic)查看网络请求
 3. 从请求头中找到 `X-Sc-Od` 字段
 
@@ -117,11 +121,6 @@ ZanaoMCP/
     ├── model.go      # 数据模型
     └── header.go     # 请求头配置
 ```
-
-## 依赖
-
-- [go-resty/resty](https://github.com/go-resty/resty) - HTTP 客户端
-- [modelcontextprotocol/go-sdk](https://github.com/modelcontextprotocol/go-sdk) - MCP Go SDK
 
 ## 许可证
 
