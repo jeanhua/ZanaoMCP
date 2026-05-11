@@ -15,6 +15,9 @@ type dataList[T any] basicData[struct {
 	List []T `json:"list"`
 }]
 
+// data 直接是数组的情况（如搜索接口）
+type dataArray[T any] basicData[[]T]
+
 type Category struct {
 	CateID  string `json:"cate_id"`
 	Name    string `json:"name"`

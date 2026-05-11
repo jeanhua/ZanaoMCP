@@ -1,6 +1,7 @@
 package zanao
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 
@@ -27,8 +28,9 @@ func NewZanaoClient(token string, schoolAlias string) *ZanaoClient {
 
 func (c *ZanaoClient) fetchPost(url string) (*[]Post, error) {
 	headers := getHeaders(c.token, c.schoolalias)
+	// 先尝试 data 为对象 {"data": {"list": [...]}} 的格式
 	var resp dataList[Post]
-	_, err := c.client.R().
+	restyResp, err := c.client.R().
 		SetHeaders(headers).
 		SetResult(&resp).
 		Post(url)
@@ -36,7 +38,18 @@ func (c *ZanaoClient) fetchPost(url string) (*[]Post, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &resp.Data.List, nil
+
+	// 如果 List 有数据，直接返回
+	if resp.Data.List != nil {
+		return &resp.Data.List, nil
+	}
+
+	// 否则尝试 data 为直接数组 {"data": [...]} 的格式
+	var arrResp dataArray[Post]
+	if err := json.Unmarshal(restyResp.Body(), &arrResp); err != nil {
+		return nil, fmt.Errorf("failed to parse response: %w (body: %s)", err, string(restyResp.Body()))
+	}
+	return &arrResp.Data, nil
 }
 
 // GetPost 获取帖子列表
