@@ -168,3 +168,59 @@ type UserInfo struct {
 func (u UserInfo) FriendlyText() string {
 	return u.Data.Info.NickName + " (等级头衔:" + u.Data.Info.UserLevelTitle + ") @ " + u.Data.SchoolName
 }
+
+// 帖子详情
+// POST https://api.x.zanao.com/thread/info
+type ThreadDetail struct {
+	ThreadID    string      `json:"thread_id"`
+	CateID      string      `json:"cate_id"`
+	Title       string      `json:"title"`
+	Content     string      `json:"content"`
+	CateName    string      `json:"cate_name"`
+	NickName    string      `json:"nickname"`
+	ViewCount   json.Number `json:"view_count"`
+	LikeNum     json.Number `json:"like_num"`
+	DislikeNum  json.Number `json:"dislike_num"`
+	PostTime    string      `json:"post_time"`
+	PTime       string      `json:"pt_time"`
+	LikeHas     bool        `json:"like_has"`
+	DislikeHas  bool        `json:"dislike_has"`
+	MarkHas     bool        `json:"mark_has"`
+	IsMine      bool        `json:"is_mine"`
+	IsAnon      bool        `json:"is_anon"`
+	ContactPerson string    `json:"contact_person"`
+	ContactPhone string     `json:"contact_phone"`
+	ContactQQ   string      `json:"contact_qq"`
+	ContactWX   string      `json:"contact_wx"`
+	ImgPaths    []string    `json:"img_paths"`
+	UserLevel   int         `json:"user_level"`
+	UserLevelTitle string   `json:"user_level_title"`
+	HeadImgURL  string      `json:"headimgurl"`
+	CommentStatus string    `json:"comment_status"`
+	FinishStatus string     `json:"finish_status"`
+	CheckStatus  string     `json:"check_status"`
+}
+
+func (d ThreadDetail) FriendlyText() string {
+	result := fmt.Sprintf("[ThreadID:%s] %s\n", d.ThreadID, d.Title)
+	if d.NickName != "" {
+		result += fmt.Sprintf("作者: %s (%s) 等级: %s\n", d.NickName, d.CateName, d.UserLevelTitle)
+	}
+	result += d.Content + "\n"
+	result += fmt.Sprintf("浏览:%s 点赞:%s 点踩:%s\n", d.ViewCount.String(), d.LikeNum.String(), d.DislikeNum.String())
+	result += fmt.Sprintf("发布时间: %s (%s)\n", d.PostTime, d.PTime)
+	if d.IsMine {
+		result += "[我的帖子] "
+	}
+	if d.IsAnon {
+		result += "[匿名] "
+	}
+	result += fmt.Sprintf("我点赞:%v 我点踩:%v 我收藏:%v\n", d.LikeHas, d.DislikeHas, d.MarkHas)
+	if d.ContactPerson != "" || d.ContactPhone != "" || d.ContactQQ != "" || d.ContactWX != "" {
+		result += fmt.Sprintf("联系方式: 联系人:%s 电话:%s QQ:%s 微信:%s\n", d.ContactPerson, d.ContactPhone, d.ContactQQ, d.ContactWX)
+	}
+	for _, img := range d.ImgPaths {
+		result += "图片: " + img + "\n"
+	}
+	return result
+}

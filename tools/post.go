@@ -405,6 +405,47 @@ func CreatePostTool(s *mcp.Server) {
 	})
 }
 
+// ThreadInfoTool 获取帖子详情工具
+func ThreadInfoTool(s *mcp.Server) {
+	s.AddTool(&mcp.Tool{
+		Name:        "campus_market_thread_info",
+		Description: "获取指定帖子的详细信息（标题、内容、作者、浏览/点赞数、发布时间等）",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"thread_id": map[string]interface{}{
+					"type":        "string",
+					"description": "帖子ID",
+				},
+			},
+			"required": []string{"thread_id"},
+		},
+	}, func(ctx context.Context, req *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		var args struct {
+			ThreadID string `json:"thread_id"`
+		}
+		if err := json.Unmarshal(req.Params.Arguments, &args); err != nil {
+			return nil, err
+		}
+
+		if args.ThreadID == "" {
+			return nil, fmt.Errorf("thread_id is required")
+		}
+
+		client := getClient()
+		detail, err := client.GetThreadInfo(args.ThreadID)
+		if err != nil {
+			return nil, err
+		}
+
+		return &mcp.CallToolResult{
+			Content: []mcp.Content{
+				&mcp.TextContent{Text: detail.FriendlyText()},
+			},
+		}, nil
+	})
+}
+
 // ChangePostStatusTool 修改帖子状态工具
 func ChangePostStatusTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{

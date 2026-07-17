@@ -20,6 +20,7 @@ func StartServer() {
 	tools.HotPostsTool(s)
 	tools.SearchPostsTool(s)
 	tools.SearchHistoryPostsTool(s)
+	tools.ThreadInfoTool(s)
 
 	// 注册评论相关工具
 	tools.GetCommentsTool(s)

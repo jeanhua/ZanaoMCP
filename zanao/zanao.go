@@ -139,6 +139,31 @@ func (c *ZanaoClient) GetCategory() (*[]Category, error) {
 	return &resp.Data.CateList, nil
 }
 
+// GetThreadInfo 获取帖子详情
+// threadID: 帖子ID
+func (c *ZanaoClient) GetThreadInfo(threadID string) (*ThreadDetail, error) {
+	url := "https://api.x.zanao.com/thread/info"
+	var resp struct {
+		ErrNo  int    `json:"errno"`
+		ErrMsg string `json:"errmsg"`
+		Data   struct {
+			Detail ThreadDetail `json:"detail"`
+		} `json:"data"`
+	}
+	_, err := c.client.R().
+		SetHeaders(getHeaders(c.token, c.schoolalias)).
+		SetFormData(map[string]string{"id": threadID}).
+		SetResult(&resp).
+		Post(url)
+	if err != nil {
+		return nil, err
+	}
+	if resp.ErrNo != 0 {
+		return nil, fmt.Errorf("API error: %s (errno=%d)", resp.ErrMsg, resp.ErrNo)
+	}
+	return &resp.Data.Detail, nil
+}
+
 // ------------------------------------------------------------------------------- //
 //
 //	写请求										//
