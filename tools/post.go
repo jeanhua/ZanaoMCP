@@ -13,7 +13,7 @@ import (
 func ListPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
 		Name:        "campus_market_list_posts",
-		Description: "获取集市帖子列表，支持分页",
+		Description: "获取集市帖子列表，支持分页（含帖子图片链接 img_paths）",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -62,7 +62,7 @@ func ListPostsTool(s *mcp.Server) {
 func HotPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
 		Name:        "campus_market_hot_posts",
-		Description: "获取集市热门帖子列表",
+		Description: "获取集市热门帖子列表（含帖子图片链接 img_paths）",
 		InputSchema: map[string]interface{}{
 			"type":       "object",
 			"properties": map[string]interface{}{},
@@ -93,7 +93,7 @@ func HotPostsTool(s *mcp.Server) {
 func SearchPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
 		Name:        "campus_market_search_posts",
-		Description: "在集市中搜索实时帖子(最近的发布的帖子)",
+		Description: "在集市中搜索实时帖子(最近的发布的帖子，含帖子图片链接 img_paths)",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -150,7 +150,7 @@ func SearchPostsTool(s *mcp.Server) {
 func SearchHistoryPostsTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
 		Name:        "campus_market_search_history_posts",
-		Description: "在集市中搜索历史帖子，支持时间范围筛选",
+		Description: "在集市中搜索历史帖子，支持时间范围筛选（含帖子图片链接 img_paths）",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{
@@ -409,7 +409,7 @@ func CreatePostTool(s *mcp.Server) {
 func ThreadInfoTool(s *mcp.Server) {
 	s.AddTool(&mcp.Tool{
 		Name:        "campus_market_thread_info",
-		Description: "获取指定帖子的详细信息（标题、内容、作者、浏览/点赞数、发布时间等）",
+		Description: "获取指定帖子的详细信息（标题、内容、作者、浏览/点赞数、发布时间、图片链接等）",
 		InputSchema: map[string]interface{}{
 			"type": "object",
 			"properties": map[string]interface{}{

@@ -81,10 +81,13 @@ go build -o zanao-mcp
 | `hot_posts` | 获取热门帖子列表 |
 | `search_posts` | 在当前分类搜索帖子 |
 | `search_history_posts` | 搜索历史帖子 |
+| `thread_info` | 获取帖子详情（含图片链接） |
 | `create_post` | 发布新帖子 |
 | `like_post` | 点赞帖子 |
 | `unlike_post` | 取消点赞帖子 |
 | `change_post_status` | 修改帖子状态 |
+
+> 帖子类接口返回的图片在文本输出中形如 `[图片: https://... https://...]`，JSON 字段为 `img_paths`（数组）和 `headimgurl`（头像），均已补全为可直接访问的完整 https 链接（相对路径会自动加上 `https://b1.cdn.zanao.com/` 前缀）。
 
 ### 评论相关
 

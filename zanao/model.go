@@ -3,6 +3,7 @@ package zanao
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type basicData[T any] struct {
@@ -17,6 +18,51 @@ type dataList[T any] basicData[struct {
 
 // data 直接是数组的情况（如搜索接口）
 type dataArray[T any] basicData[[]T]
+
+// 图片 CDN 前缀，接口返回的 img_paths 是相对路径（如 upload/2026/10/06/xxx.jpg）
+const imageCDNBase = "https://b1.cdn.zanao.com/"
+
+// ImageURL 图片地址，兼容相对路径、协议相对地址（//b1.cdn.zanao.com/...）与完整 URL，
+// 解析 JSON 时统一补全为可直接访问的 https 链接
+type ImageURL string
+
+func (u ImageURL) String() string {
+	return string(u)
+}
+
+func (u *ImageURL) UnmarshalJSON(data []byte) error {
+	var raw string
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	*u = ImageURL(fullImageURL(raw))
+	return nil
+}
+
+func fullImageURL(raw string) string {
+	raw = strings.TrimSpace(raw)
+	switch {
+	case raw == "":
+		return ""
+	case strings.HasPrefix(raw, "//"):
+		return "https:" + raw
+	case strings.HasPrefix(raw, "http://"), strings.HasPrefix(raw, "https://"):
+		return raw
+	default:
+		return imageCDNBase + strings.TrimPrefix(raw, "/")
+	}
+}
+
+// joinImageURLs 拼接多张图片地址，空格分隔
+func joinImageURLs(imgs []ImageURL) string {
+	parts := make([]string, 0, len(imgs))
+	for _, img := range imgs {
+		if url := img.String(); url != "" {
+			parts = append(parts, url)
+		}
+	}
+	return strings.Join(parts, " ")
+}
 
 type Category struct {
 	CateID  string `json:"cate_id"`
@@ -53,23 +99,30 @@ type Post struct {
 	PostTime     string      `json:"post_time"`
 	PTime        string      `json:"p_time"`
 	ThreadID     string      `json:"thread_id"`
+	ImgPaths     []ImageURL  `json:"img_paths"`
+	HeadImgURL   ImageURL    `json:"headimgurl"`
 }
 
 func (p Post) FriendlyText() string {
-	return "[ThreadID:" + p.ThreadID + "] [nickname: " + p.NickName + "] [" + p.CateName + "] [title: " + p.Title + "] " + p.Content +
+	result := "[ThreadID:" + p.ThreadID + "] [nickname: " + p.NickName + "] [" + p.CateName + "] [title: " + p.Title + "] " + p.Content +
 		" (浏览" + fmt.Sprintf("%s", p.ViewCount.String()) + ", 评论" + fmt.Sprintf("%s", p.CommentCount.String()) +
 		", 点赞" + fmt.Sprintf("%s", p.LikeCount.String()) + ", " + p.PostTime + "[timestamp: " + p.PTime + "])"
+	if imgs := joinImageURLs(p.ImgPaths); imgs != "" {
+		result += " [图片: " + imgs + "]"
+	}
+	return result
 }
 
 // 评论列表
 // POST https://api.x.zanao.com/comment/list?id=xxx&sign=xxx
 type Comment struct {
-	NickName  string         `json:"nickname"`
-	Content   string         `json:"content"`
-	PostTime  string         `json:"post_time_text"`
-	LikeNum   json.Number    `json:"like_num"`
-	CommentID string         `json:"comment_id"`
-	ReplyList []CommentReply `json:"reply_list"`
+	NickName   string         `json:"nickname"`
+	Content    string         `json:"content"`
+	PostTime   string         `json:"post_time_text"`
+	LikeNum    json.Number    `json:"like_num"`
+	CommentID  string         `json:"comment_id"`
+	HeadImgURL ImageURL       `json:"headimgurl"`
+	ReplyList  []CommentReply `json:"reply_list"`
 }
 
 func (c Comment) FriendlyText() string {
@@ -90,6 +143,7 @@ type CommentReply struct {
 	LikeNum        json.Number `json:"like_num"`
 	CommentID      string      `json:"comment_id"`
 	ReplyCommentID string      `json:"reply_comment_id"`
+	HeadImgURL     ImageURL    `json:"headimgurl"`
 }
 
 func (cr CommentReply) FriendlyText() string {
@@ -192,10 +246,10 @@ type ThreadDetail struct {
 	ContactPhone string     `json:"contact_phone"`
 	ContactQQ   string      `json:"contact_qq"`
 	ContactWX   string      `json:"contact_wx"`
-	ImgPaths    []string    `json:"img_paths"`
+	ImgPaths    []ImageURL  `json:"img_paths"`
 	UserLevel   int         `json:"user_level"`
 	UserLevelTitle string   `json:"user_level_title"`
-	HeadImgURL  string      `json:"headimgurl"`
+	HeadImgURL  ImageURL    `json:"headimgurl"`
 	CommentStatus string    `json:"comment_status"`
 	FinishStatus string     `json:"finish_status"`
 	CheckStatus  string     `json:"check_status"`
@@ -219,8 +273,8 @@ func (d ThreadDetail) FriendlyText() string {
 	if d.ContactPerson != "" || d.ContactPhone != "" || d.ContactQQ != "" || d.ContactWX != "" {
 		result += fmt.Sprintf("联系方式: 联系人:%s 电话:%s QQ:%s 微信:%s\n", d.ContactPerson, d.ContactPhone, d.ContactQQ, d.ContactWX)
 	}
-	for _, img := range d.ImgPaths {
-		result += "图片: " + img + "\n"
+	if imgs := joinImageURLs(d.ImgPaths); imgs != "" {
+		result += "图片: " + imgs + "\n"
 	}
 	return result
 }
