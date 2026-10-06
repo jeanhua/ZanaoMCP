@@ -34,9 +34,11 @@ description: 赞哦校园集市完整操作技能（MCP 版），覆盖入门配
 
 帖子列表、热门、搜索、帖子详情的返回中都会带图片链接：
 
-- 文本输出形如 `[图片: https://b1.cdn.zanao.com/upload/...jpg https://... ]`，多张以空格分隔
+- 文本输出形如 `[图片: https://b1.cdn.zanao.com/upload/...jpg@!common https://... ]`，多张以空格分隔
 - 帖子详情输出形如 `图片: https://... https://...`
-- JSON 字段为 `img_paths`（数组）、头像为 `headimgurl`，均已是完整 `https` 链接，可直接下载或展示
+- JSON 字段为 `img_paths`（数组）、头像为 `headimgurl`，均已是可直接访问的 `https` 链接
+
+**注意**：赞哦图床禁止访问原图（不带后缀返回 403），链接末尾的 `@!common` 是必需的样式参数，**不要去掉或改写**。这是官方网页端 `IMG_STYLE_COMMON` 用的规格：保留原始宽高比、长边最高 1080，**不裁剪**。手动拼接时务必带上。
 
 发帖/评论前如需参考帖子里的图，用上述链接获取图片内容。
 

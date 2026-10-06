@@ -22,6 +22,11 @@ type dataArray[T any] basicData[[]T]
 // 图片 CDN 前缀，接口返回的 img_paths 是相对路径（如 upload/2026/10/06/xxx.jpg）
 const imageCDNBase = "https://b1.cdn.zanao.com/"
 
+// 图床禁止访问原图（裸路径返回 403 Forbidden access to the original image），
+// 必须带样式后缀。官方网页端(c.zanao.com)使用 IMG_STYLE_COMMON="@!common"：
+// 保留原始宽高比、长边最高 1080，不裁剪；而 @!sm_wN_hN 系列会裁成正方形丢内容。
+const imageStyleSuffix = "@!common"
+
 // ImageURL 图片地址，兼容相对路径、协议相对地址（//b1.cdn.zanao.com/...）与完整 URL，
 // 解析 JSON 时统一补全为可直接访问的 https 链接
 type ImageURL string
@@ -45,12 +50,20 @@ func fullImageURL(raw string) string {
 	case raw == "":
 		return ""
 	case strings.HasPrefix(raw, "//"):
-		return "https:" + raw
+		return applyImageStyle("https:" + raw)
 	case strings.HasPrefix(raw, "http://"), strings.HasPrefix(raw, "https://"):
-		return raw
+		return applyImageStyle(raw)
 	default:
-		return imageCDNBase + strings.TrimPrefix(raw, "/")
+		return applyImageStyle(imageCDNBase + strings.TrimPrefix(raw, "/"))
 	}
+}
+
+// applyImageStyle 给未带样式的图片地址补上可访问的样式后缀
+func applyImageStyle(u string) string {
+	if strings.Contains(u, "@!") {
+		return u
+	}
+	return u + imageStyleSuffix
 }
 
 // joinImageURLs 拼接多张图片地址，空格分隔
